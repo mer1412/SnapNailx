@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapNail • Вход</title>
+  <link href="/static/css/style.css" rel="stylesheet">
+  <script src="/static/js/htmx.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Одинаковые стили как в register.html */
+    body {
+      background: linear-gradient(135deg, #f0f4ff 0%, #e6edff 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .auth-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 480px;
+      transition: all 0.3s ease;
+    }
+    
+    .auth-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border-radius: 24px;
+      margin: 0 auto 1rem;
+    }
+    
+    .logo-icon i {
+      font-size: 2rem;
+      color: white;
+    }
+    
+    .logo-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    
+    .logo-subtitle {
+      color: #4b5563;
+      font-size: 1.1rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+    
+    .auth-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    
+    .auth-link {
+      color: #10b981;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .auth-link:hover {
+      color: #059669;
+      text-decoration: underline;
+    }
+    
+    .result-container {
+      margin-top: 1rem;
+      min-height: 40px;
+    }
+    
+    .forgot-password {
+      text-align: right;
+      margin-top: -0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .forgot-password a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+    
+    .forgot-password a:hover {
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+    <nav class="navbar">
+  <div class="container nav-container">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">SN</div>
+      <div class="nav-logo-text">SnapNail</div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link {% if page == 'home' %}active{% endif %}">
+        <i class="fas fa-home"></i> Главная
+      </a>
+      <a href="/register" class="nav-link {% if page == 'register' %}active{% endif %}">
+        <i class="fas fa-user-plus"></i> Регистрация
+      </a>
+      <a href="/login" class="nav-link {% if page == 'login' %}active{% endif %}">
+        <i class="fas fa-sign-in-alt"></i> Вход
+      </a>
+      <a href="/account" class="nav-link {% if page == 'account' %}active{% endif %}">
+        <i class="fas fa-user"></i> Аккаунт
+      </a>
+    </div>
+  </div>
+</nav>
+  <div class="auth-container">
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-sign-in-alt"></i>
+      </div>
+      <h1 class="logo-title">SnapNail</h1>
+      <p class="logo-subtitle">Войдите в свой аккаунт</p>
+    </div>
+    
+    <form hx-post="/login" hx-target="#result-container" class="space-y-4">
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-input" placeholder="ваш@email.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password" class="form-label">Пароль</label>
+        <input type="password" id="password" name="password" class="form-input" placeholder="ваш пароль" required>
+        
+        <div class="forgot-password">
+          <a href="#" onclick="alert('Функция восстановления пароля будет добавлена позже')">Забыли пароль?</a>
+        </div>
+      </div>
+      
+      <button type="submit" class="submit-btn">
+        <i class="fas fa-sign-in-alt"></i>
+        Войти в аккаунт
+      </button>
+    </form>
+    
+    <div class="result-container" id="result-container"></div>
+    
+    <div class="auth-footer">
+      <p>Нет аккаунта? <a href="/register" class="auth-link">Зарегистрироваться</a></p>
+    </div>
+  </div>
+</body>
+</html>

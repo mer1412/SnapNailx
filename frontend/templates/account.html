@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapNail • Аккаунт</title>
+  <link href="/static/css/style.css" rel="stylesheet">
+  <script src="/static/js/htmx.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f4ff 0%, #e6edff 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border-radius: 18px;
+    }
+    
+    .logo-icon i {
+      font-size: 1.8rem;
+      color: white;
+    }
+    
+    .logo-title {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    @media (min-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr 350px;
+      }
+    }
+    
+    .main-content {
+      background: white;
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .section-title i {
+      color: #6366f1;
+    }
+    
+    .posts-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    
+    .posts-table th {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    
+    .posts-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .posts-table tr:hover {
+      background: #f8fafc;
+    }
+    
+    .post-text {
+      font-weight: 500;
+      color: #1e293b;
+      max-width: 300px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .post-url {
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: #6366f1;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .post-url:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+    
+    .post-expiry {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    
+    .actions-cell {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      background: none;
+    }
+    
+    .action-btn.copy {
+      color: #6366f1;
+      background: rgba(99, 102, 241, 0.1);
+    }
+    
+    .action-btn.delete {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+    
+    .action-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .profile-card, .stats-card {
+      background: white;
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    
+    .profile-email {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 16px;
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+    
+    .logout-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #64748b;
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #cbd5e1;
+    }
+    
+    .empty-state p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .create-btn {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .create-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+  </style>
+</head>
+<body>
+    <nav class="navbar">
+  <div class="container nav-container">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">SN</div>
+      <div class="nav-logo-text">SnapNail</div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link {% if page == 'home' %}active{% endif %}">
+        <i class="fas fa-home"></i> Главная
+      </a>
+      <a href="/register" class="nav-link {% if page == 'register' %}active{% endif %}">
+        <i class="fas fa-user-plus"></i> Регистрация
+      </a>
+      <a href="/login" class="nav-link {% if page == 'login' %}active{% endif %}">
+        <i class="fas fa-sign-in-alt"></i> Вход
+      </a>
+      <a href="/account" class="nav-link {% if page == 'account' %}active{% endif %}">
+        <i class="fas fa-user"></i> Аккаунт
+      </a>
+    </div>
+  </div>
+</nav>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h1 class="logo-title">SnapNail</h1>
+      </div>
+      <div class="user-info">
+        <div class="user-avatar">AK</div>
+        <div>
+          <div class="profile-name">akhad@example.com</div>
+          <div class="profile-email">Активные посты: 3</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-grid">
+      <div class="main-content">
+        <h2 class="section-title">
+          <i class="fas fa-list"></i> Мои посты
+        </h2>
+        
+        <div class="empty-state" id="empty-state">
+          <i class="fas fa-inbox"></i>
+          <p>У вас пока нет активных постов</p>
+          <button class="create-btn" onclick="window.location.href='/'">
+            <i class="fas fa-plus"></i> Создать первый пост
+          </button>
+        </div>
+        
+        <table class="posts-table" id="posts-table" style="display: none;">
+          <thead>
+            <tr>
+              <th>Текст</th>
+              <th>Ссылка</th>
+              <th>Истекает</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="post-text">Привет, мир! Это мой первый пост</td>
+              <td>
+                <a href="/p/abc123" class="post-url" target="_blank">snapnail.com/p/abc123</a>
+              </td>
+              <td class="post-expiry">24 мая 2025, 15:30</td>
+              <td class="actions-cell">
+                <button class="action-btn copy" title="Копировать ссылку">
+                  <i class="fas fa-copy"></i>
+                </button>
+                <button class="action-btn delete" title="Удалить пост">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td class="post-text">Второй тестовый пост с другим цветом</td>
+              <td>
+                <a href="/p/def456" class="post-url" target="_blank">snapnail.com/p/def456</a>
+              </td>
+              <td class="post-expiry">24 мая 2025, 18:45</td>
+              <td class="actions-cell">
+                <button class="action-btn copy" title="Копировать ссылку">
+                  <i class="fas fa-copy"></i>
+                </button>
+                <button class="action-btn delete" title="Удалить пост">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="sidebar">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="user-avatar">AK</div>
+            <div>
+              <div class="profile-name">akhad</div>
+              <div class="profile-email">akhad@example.com</div>
+            </div>
+          </div>
+          
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value">3</div>
+              <div class="stat-label">Активных постов</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">7</div>
+              <div class="stat-label">Всего постов</div>
+            </div>
+          </div>
+          
+          <button class="logout-btn" onclick="alert('Выход из системы')">
+            <i class="fas fa-sign-out-alt"></i>
+            Выйти из аккаунта
+          </button>
+        </div>
+        
+        <div class="stats-card">
+          <h3 class="section-title">
+            <i class="fas fa-chart-bar"></i> Статистика
+          </h3>
+          <div class="stat-item">
+            <div class="stat-value">95%</div>
+            <div class="stat-label">Удовлетворенность</div>
+          </div>
+          <p class="text-center text-sm text-gray-500 mt-2">
+            Данные обновляются в реальном времени
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Показываем таблицу если есть посты
+      const hasPosts = document.querySelectorAll('#posts-table tbody tr').length > 0;
+      if (hasPosts) {
+        document.getElementById('empty-state').style.display = 'none';
+        document.getElementById('posts-table').style.display = 'table';
+      }
+      
+      // Обработчики кнопок
+      document.querySelectorAll('.action-btn.copy').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const url = this.closest('tr').querySelector('.post-url').href;
+          navigator.clipboard.writeText(url).then(() => {
+            const originalIcon = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-check"></i>';
+            this.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+            this.style.color = '#10b981';
+            
+            setTimeout(() => {
+              this.innerHTML = originalIcon;
+              this.style.backgroundColor = '';
+              this.style.color = '';
+            }, 2000);
+          });
+        });
+      });
+      
+      document.querySelectorAll('.action-btn.delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (confirm('Вы уверены, что хотите удалить этот пост?')) {
+            this.closest('tr').remove();
+            
+            // Проверяем, остались ли посты
+            const remainingPosts = document.querySelectorAll('#posts-table tbody tr').length;
+            if (remainingPosts === 0) {
+              document.getElementById('empty-state').style.display = 'block';
+              document.getElementById('posts-table').style.display = 'none';
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

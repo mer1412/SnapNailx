@@ -14,7 +14,20 @@ templates = Jinja2Templates(directory="frontend/templates")
 
 @app.get("/",summary="main",tags=["Основная"])
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "page": "home"})
+
+
+@app.get("/register")
+async def register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request, "page": "register"})
+
+@app.get("/login")
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "page": "login"})
+
+@app.get("/account")
+async def account_page(request: Request):
+    return templates.TemplateResponse("account.html", {"request": request, "page": "account"})
 
 @app.post("/create")
 async def create_post(
