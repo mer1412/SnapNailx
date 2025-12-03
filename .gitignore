@@ -2,6 +2,7 @@
 
 venv
 __pycche__
+__pycche__/
 
 .code
 .vscode
