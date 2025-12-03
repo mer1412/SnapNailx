@@ -1,0 +1,9 @@
+# pip install "fastapi[standard]"
+fastapi[standard]
+logging
+sqlalchemy
+
+uvicorn[standard]
+psycopg2-binary
+python-nanoid
+python-multipart

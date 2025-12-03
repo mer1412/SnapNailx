@@ -1,0 +1,43 @@
+<!-- frontend/templates/index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapNail</title>
+  <script src="/static/js/htmx.min.js"></script>
+  <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-lg p-6 max-w-md w-full">
+    <h1 class="text-2xl font-bold text-center mb-6">SnapNail</h1>
+    
+    <form hx-post="/create" hx-target="#result" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Текст</label>
+        <textarea name="text" rows="3" 
+          class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Ваш текст здесь..."></textarea>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Цвет фона</label>
+          <input type="color" name="bg_color" value="#ffffff" class="w-full h-10">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Цвет текста</label>
+          <input type="color" name="text_color" value="#000000" class="w-full h-10">
+        </div>
+      </div>
+      
+      <button type="submit" 
+        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        Создать пост
+      </button>
+    </form>
+    
+    <div id="result" class="mt-6 min-h-[60px]"></div>
+  </div>
+</body>
+</html>
