@@ -1,7 +1,7 @@
 .env
 
 venv
-*/__pycche__
+*/__pycache__
 
 .code
 .vscode
