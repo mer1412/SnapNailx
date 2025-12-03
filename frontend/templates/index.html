@@ -4,40 +4,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SnapNail</title>
+  <title>SnapNail • Создай мгновенный пост</title>
   <script src="/static/js/htmx.min.js"></script>
   <link href="/static/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      min-height: 100vh;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+    
+    .color-preview {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 2px solid rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+    
+    .preview-container {
+      min-height: 100px;
+      transition: all 0.3s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.7; }
+      70% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-  <div class="bg-white rounded-xl shadow-lg p-6 max-w-md w-full">
-    <h1 class="text-2xl font-bold text-center mb-6">SnapNail</h1>
-    
-    <form hx-post="/create" hx-target="#result" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium mb-1">Текст</label>
-        <textarea name="text" rows="3" 
-          class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Ваш текст здесь..."></textarea>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-2xl">
+    <!-- Логотип и заголовок -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 mb-4">
+        <i class="fas fa-bolt text-xl"></i>
       </div>
-      
-      <div class="grid grid-cols-2 gap-4">
+      <h1 class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+        SnapNail
+      </h1>
+      <p class="text-gray-600 mt-2">Создайте стильный пост за 10 секунд</p>
+    </div>
+
+    <!-- Основная карточка -->
+    <div class="glass-card rounded-2xl p-6 md:p-8">
+      <!-- Форма создания поста -->
+      <form hx-post="/create" hx-target="#result" hx-indicator="#loading-spinner" class="space-y-6">
         <div>
-          <label class="block text-sm font-medium mb-1">Цвет фона</label>
-          <input type="color" name="bg_color" value="#ffffff" class="w-full h-10">
+          <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <i class="fas fa-align-center text-indigo-500"></i>
+            Текст поста
+          </label>
+          <textarea name="text" rows="4" 
+            class="w-full p-4 rounded-xl border border-gray-200 focus:ring-3 focus:ring-indigo-300 focus:border-indigo-400 transition-all duration-300 resize-none"
+            placeholder="Введите ваш текст здесь... Максимум 280 символов"
+            maxlength="280"
+            required></textarea>
+          <div class="text-right mt-1">
+            <span class="text-xs text-gray-500">0/280</span>
+          </div>
         </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Цвет текста</label>
-          <input type="color" name="text_color" value="#000000" class="w-full h-10">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <i class="fas fa-palette text-indigo-500"></i>
+              Цвет фона
+            </label>
+            <div class="flex items-center gap-3">
+              <input type="color" name="bg_color" value="#ffffff" 
+                class="w-12 h-12 rounded-xl cursor-pointer border-0 shadow-md"
+                id="bg-color-picker">
+              <div class="flex-1">
+                <input type="text" id="bg-color-value" value="#ffffff" 
+                  class="w-full p-2 rounded-lg border border-gray-200 font-mono text-sm text-center focus:ring-2 focus:ring-indigo-300">
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <i class="fas fa-font text-indigo-500"></i>
+              Цвет текста
+            </label>
+            <div class="flex items-center gap-3">
+              <input type="color" name="text_color" value="#000000" 
+                class="w-12 h-12 rounded-xl cursor-pointer border-0 shadow-md"
+                id="text-color-picker">
+              <div class="flex-1">
+                <input type="text" id="text-color-value" value="#000000" 
+                  class="w-full p-2 rounded-lg border border-gray-200 font-mono text-sm text-center focus:ring-2 focus:ring-indigo-300">
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Превью поста -->
+        <div class="mt-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <i class="fas fa-eye text-indigo-500"></i>
+            Превью поста
+          </label>
+          <div id="preview-container" class="glass-card rounded-xl p-6 min-h-[150px] flex items-center justify-center">
+            <div class="text-center">
+              <p class="text-gray-500">Ваш пост появится здесь</p>
+              <p class="text-xs text-gray-400 mt-1">Пост будет автоматически удален через 24 часа</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Кнопка создания -->
+        <div class="pt-4 border-t border-gray-100">
+          <button type="submit" class="submit-btn w-full text-white font-medium py-3 px-6 rounded-xl text-lg flex items-center justify-center gap-2 hover:shadow-lg">
+            <i class="fas fa-magic"></i>
+            <span>Создать пост</span>
+            <i class="fas fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Индикатор загрузки -->
+      <div id="loading-spinner" class="hidden mt-4 flex justify-center">
+        <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
       </div>
-      
-      <button type="submit" 
-        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-        Создать пост
-      </button>
-    </form>
-    
-    <div id="result" class="mt-6 min-h-[60px]"></div>
+
+      <!-- Результат -->
+      <div id="result" class="mt-6 min-h-[60px]"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-8 text-sm text-gray-500">
+      <p>© 2025 SnapNail • Мгновенные посты с сохранением стиля</p>
+    </div>
   </div>
+
+  <script>
+    // Обновление превью в реальном времени
+    document.addEventListener('DOMContentLoaded', function() {
+      const textInput = document.querySelector('textarea[name="text"]');
+      const bgColorPicker = document.getElementById('bg-color-picker');
+      const textColorPicker = document.getElementById('text-color-picker');
+      const previewContainer = document.getElementById('preview-container');
+      
+      // Синхронизация цветовых полей
+      document.getElementById('bg-color-value').value = bgColorPicker.value;
+      document.getElementById('text-color-value').value = textColorPicker.value;
+      
+      bgColorPicker.addEventListener('input', function() {
+        document.getElementById('bg-color-value').value = this.value;
+        updatePreview();
+      });
+      
+      textColorPicker.addEventListener('input', function() {
+        document.getElementById('text-color-value').value = this.value;
+        updatePreview();
+      });
+      
+      textInput.addEventListener('input', function() {
+        // Обновление счетчика символов
+        const count = this.value.length;
+        this.parentElement.querySelector('span').textContent = `${count}/280`;
+        updatePreview();
+      });
+      
+      function updatePreview() {
+        const text = textInput.value.trim() || 'Ваш текст появится здесь';
+        const bg = bgColorPicker.value;
+        const color = textColorPicker.value;
+        
+        previewContainer.style.backgroundColor = bg;
+        previewContainer.innerHTML = `
+          <div class="w-full h-full flex items-center justify-center p-4">
+            <p class="text-lg font-medium text-center" style="color: ${color}; max-width: 90%;">
+              ${text.replace(/\n/g, '<br>')}
+            </p>
+          </div>
+        `;
+      }
+      
+      // Инициализация превью
+      updatePreview();
+      
+      // HTMX события
+      document.body.addEventListener('htmx:configRequest', function(evt) {
+        document.getElementById('loading-spinner').classList.remove('hidden');
+      });
+      
+      document.body.addEventListener('htmx:afterRequest', function(evt) {
+        document.getElementById('loading-spinner').classList.add('hidden');
+      });
+    });
+  </script>
 </body>
 </html>
